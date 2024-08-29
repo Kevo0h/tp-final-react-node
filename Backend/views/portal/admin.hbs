@@ -1,0 +1,113 @@
+<style>
+  .form-container { display: flex; justify-content: center; align-items: center;
+  height: 100vh; background-color: #f8f9fa; } .form-wrapper { width: 100%;
+  max-width: 600px; padding: 20px; background-color: #ffffff; border-radius:
+  8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); } .btn-submit {
+  background-color: #28a745; border-color: #28a745; } .btn-submit:hover {
+  background-color: #218838; border-color: #1e7e34; }
+</style>
+
+{{#if form1}}
+  <h1>Hola {{persona}} </h1>
+  <a class="btn btn-danger" href="/login/cerrar-sesion"> Cerrar Sesion</a>
+  <div class="container mt-5">
+    <h2>Lista de reclamos</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>ID-Reclamo</th>
+          <th>tipo</th>
+          <th>comentario</th>
+          <th>estado</th>
+          <th>acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each reclamos}}
+          <tr>
+            <td>{{usuario_reclamo}}</td>
+            <td>{{id}}</td>
+            <td>{{tipo_reclamo}}</td>
+
+            <td>{{comentario}}</td>
+
+            <td>
+              <p>{{estado}}</p>
+
+            </td>
+            <td class="text-end">
+              <a
+                class="btn btn-secondary"
+                href="/portal/admin/modificar/{{id}}"
+              ><i class="fa fa-pencil"></i></a>
+              <a
+                class="btn btn-secondary"
+                href="/portal/admin/eliminar/{{id}}"
+              ><i class="fa fa-trash"></i></a>
+
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{/if}}
+
+{{#if form2}}
+
+  <a class="btn btn-success" href="/portal/admin"> ATRAS</a>
+
+  <div class="container mt-5">
+    <h1>Ey! {{persona}}, entraste al portal de modificacion</h1>
+    {{#each modificar}}
+      <h2>Reclamo a modificar:{{id}} </h2>
+
+      <form action="/portal/admin/modificar" method="post">
+        <div class="mb-3">
+          <label for="tipo_reclamo" class="me-2 mb-0">Numero de reclamo</label>
+          <input
+            type="text"
+            class="form-control"
+            id="campoTexto"
+            value={{id}}
+            name="id"
+            readonly
+          /></div>
+
+        <div class="mb-3">
+          <label for="tipo_reclamo" class="me-2 mb-0">Tipo de incidente:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="campoTexto"
+            value={{tipo_reclamo}}
+            name="tipo_reclamo"
+            readonly
+          /></div>
+
+        <div class="mb-3">
+          <label for="reclamo" class="me-2 mb-0">Estado:</label>
+          <select id="reclamo" name="estado" class="form-select" required>
+            <option value="" disabled selected>{{estado}}</option>
+            <option value="en curso">EN CURSO</option>
+            <option value="finalizado">FINALIZADO</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="comentario" class="form-label"></label>
+          <textarea
+            id="comentario"
+            name="comentario"
+            class="form-control"
+            rows="4"
+            readonly
+          >{{comentario}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-submit w-100">Modificar</button>
+      </form>
+    {{/each}}
+
+  </div>
+{{/if}}

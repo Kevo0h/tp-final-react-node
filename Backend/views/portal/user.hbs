@@ -1,0 +1,156 @@
+ <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .form-container, .list-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+    }
+    .form-wrapper, .list-wrapper {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .btn-submit {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .btn-submit:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+    .table {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #212529;
+    }
+    .table th, .table td {
+      padding: 0.75rem;
+      vertical-align: middle;
+      text-align: center;
+      border-top: 1px solid #dee2e6;
+      word-wrap: break-word; /* Ensure words wrap to avoid overflow */
+    }
+    .table thead th {
+      vertical-align: bottom;
+    }
+    .table tbody + tbody {
+      border-top: 2px solid #dee2e6;
+    }
+    .table td.comment-cell {
+      max-width: 200px; /* Set the max width you prefer */
+      overflow: hidden; /* Hide overflow content */
+      text-overflow: ellipsis; /* Add ellipsis if content is too long */
+      white-space: nowrap; /* Prevent text wrapping */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Contenedor Principal -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Formulario de Reclamos -->
+      <div class="col-md-5 mb-4 mb-md-0">
+        <div class="form-container">
+          <div class="form-wrapper">
+            <h1 class="mb-4">Bienvenido : {{persona}}</h1>
+
+            <!-- Mensaje de éxito -->
+            <div id="success-message" class="alert alert-success d-none" role="alert">
+              Consulta ingresada correctamente.
+            </div>
+
+            <form action="/portal/user/agregar" method="post" id="reclamo-form">
+              <h3 class="mb-4">Por favor, ingrese su reclamo</h3>
+              <input type="hidden" name="usuario_reclamo" value="{{persona}}" />
+
+              <div class="mb-3">
+                <label for="tipo_reclamo" class="form-label">RECLAMO</label>
+                <select id="tipo_reclamo" name="tipo_reclamo" class="form-select" required>
+                  <option value="" disabled selected>Seleccione una opción</option>
+                  <option value="REPARACION">REPARACION</option>
+                  <option value="MANTENIMIENTO">MANTENIMIENTO</option>
+                  <option value="PUESTA EN MARCHA">PUESTA EN MARCHA</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="comentario" class="form-label">COMENTARIO</label>
+                <textarea id="comentario" name="comentario" class="form-control" rows="4"></textarea>
+              </div>
+
+              <input type="hidden" name="estado" value="PENDIENTE" />
+              <button type="submit" class="btn btn-submit w-100">ENVIAR YA!</button>
+            </form>
+
+            <a class="btn btn-danger w-100 mt-3" href="/login/cerrar-sesion">Cerrar Sesión</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Reclamos -->
+      <div class="col-md-7">
+        <div class="list-container">
+          <div class="list-wrapper">
+            <h2 class="mb-4">Lista de reclamos</h2>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                   
+                    <th>ID-Reclamo</th>
+                    <th>Tipo</th>
+                    <th>Comentario</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each reclamos}}
+                    <tr>
+                  
+                      <td>{{id}}</td>
+                      <td>{{tipo_reclamo}}</td>
+                      <td class="comment-cell">{{comentario}}</td>
+                      <td>{{estado}}</td>
+                      <td>
+                     
+                        <a class="btn btn-danger btn-sm ms-2" href="/portal/user/eliminar/{{id}}">
+                          <i class="fa fa-trash"></i> Eliminar
+                        </a>
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+  <script>
+    // Simulación de la respuesta del servidor
+    // Esto debería ser manejado en el backend y pasar el mensaje a través de una redirección o una respuesta JSON
+    window.addEventListener('load', function() {
+      // Aquí debes agregar tu lógica para verificar si el mensaje de éxito debe ser mostrado
+      // Por ejemplo, si el servidor pasa un parámetro de éxito, deberías mostrar el mensaje
+      // Ejemplo simple usando query string
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('success') === 'true') {
+        document.getElementById('success-message').classList.remove('d-none');
+      }
+    });
+  </script>
